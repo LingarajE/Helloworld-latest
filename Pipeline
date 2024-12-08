@@ -1,0 +1,21 @@
+pipeline {
+    agent {label "Project-A"}
+
+    stages {
+        stage('Git checkout') {
+            steps {
+                git 'https://github.com/LingarajE/Helloworld-latest.git'
+            }
+        }
+        stage('Build the project') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }     
+        stage('Depoly the project') {
+            steps {
+                deploy adapters: [tomcat9(credentialsId: 'admin', path: '', url: 'http://44.200.56.24:8080/')], contextPath: null, war: '**/*.war'
+            }
+        }         
+    }
+}
